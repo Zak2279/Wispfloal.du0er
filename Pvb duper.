@@ -1,783 +1,93 @@
-local player = game:GetService("Players").LocalPlayer
-local backpack = player:WaitForChild("Backpack")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+local Backpack = player:WaitForChild("Backpack")
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "DupeUI"
+screenGui.Name = "CloneUI"
 screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Parent = PlayerGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 320, 0, 200)
-frame.Position = UDim2.new(0.5, -160, 0.5, -100)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+frame.Size = UDim2.new(0, 220, 0, 100)
+frame.Position = UDim2.new(0.3, 0, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
 frame.Parent = screenGui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = frame
-
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(60, 60, 80)
-stroke.Thickness = 2
-stroke.Parent = frame
-
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -80, 0, 40)
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "Plant vs Brainrot Duper"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Text = "Duplicate Plant vs Brainrot"
 title.Font = Enum.Font.GothamBold
 title.TextSize = 20
-title.Parent = frame
-
-
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -70, 0, 5)
-closeButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-closeButton.BorderSizePixel = 0
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 16
-closeButton.Parent = frame
-
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 6)
-closeCorner.Parent = closeButton
-
-closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
-end)
-
-
-local minimizeButton = Instance.new("TextButton")
-minimizeButton.Size = UDim2.new(0, 30, 0, 30)
-minimizeButton.Position = UDim2.new(1, -35, 0, 5)
-minimizeButton.BackgroundColor3 = Color3.fromRGB(220, 180, 50)
-minimizeButton.BorderSizePixel = 0
-minimizeButton.Text = "-"
-minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-minimizeButton.Font = Enum.Font.GothamBold
-minimizeButton.TextSize = 20
-minimizeButton.Parent = frame
-
-local minCorner = Instance.new("UICorner")
-minCorner.CornerRadius = UDim.new(0, 6)
-minCorner.Parent = minimizeButton
-
-local isMinimized = false
-local originalSize = frame.Size
-local contentVisible = true
-
-local function toggleContent(visible)
-    infoLabel.Visible = visible
-    dupeButton.Visible = visible
-    dupeInvButton.Visible = visible
-end
-
-minimizeButton.MouseButton1Click:Connect(function()
-    if isMinimized then
-        frame:TweenSize(originalSize, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
-        minimizeButton.Text = "-"
-        isMinimized = false
-        wait(0.15)
-        toggleContent(true)
-    else
-        toggleContent(false)
-        frame:TweenSize(UDim2.new(0, 320, 0, 40), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
-        minimizeButton.Text = "+"
-        isMinimized = true
-    end
-end)
-
-local infoLabel = Instance.new("TextLabel")
-infoLabel.Size = UDim2.new(1, -20, 0, 30)
-infoLabel.Position = UDim2.new(0, 10, 0, 45)
-infoLabel.BackgroundTransparency = 1
-infoLabel.Text = "Hold an item"
-infoLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
-infoLabel.Font = Enum.Font.Gotham
-infoLabel.TextSize = 14
-infoLabel.Parent = frame
-
-local dupeButton = Instance.new("TextButton")
-dupeButton.Size = UDim2.new(0, 280, 0, 40)
-dupeButton.Position = UDim2.new(0.5, -140, 0, 85)
-dupeButton.BackgroundColor3 = Color3.fromRGB(70, 130, 255)
-dupeButton.BorderSizePixel = 0
-dupeButton.Text = "DUPE"
-dupeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-dupeButton.Font = Enum.Font.GothamBold
-dupeButton.TextSize = 16
-dupeButton.Parent = frame
-
-local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, 8)
-buttonCorner.Parent = dupeButton
-
-
-local dupeInvButton = Instance.new("TextButton")
-dupeInvButton.Size = UDim2.new(0, 280, 0, 40)
-dupeInvButton.Position = UDim2.new(0.5, -140, 0, 135)
-dupeInvButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-dupeInvButton.BorderSizePixel = 0
-dupeInvButton.Text = "Dupe Inventory (Risky)"
-dupeInvButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-dupeInvButton.Font = Enum.Font.GothamBold
-dupeInvButton.TextSize = 16
-dupeInvButton.Parent = frame
-
-local invButtonCorner = Instance.new("UICorner")
-invButtonCorner.CornerRadius = UDim.new(0, 8)
-invButtonCorner.Parent = dupeInvButton
-
-
-local dragging = false
-local dragStart = nil
-local startPos = nil
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-    end
-end)
-
-frame.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-    end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-
-local function updateHeldItem()
-    local character = player.Character
-    if character then
-        local tool = character:FindFirstChildOfClass("Tool")
-        if tool then
-            infoLabel.Text = "Holding: " .. tool.Name
-        else
-            infoLabel.Text = "Hold an item"
-        end
-    end
-end
-
-player.CharacterAdded:Connect(function(character)
-    character.ChildAdded:Connect(updateHeldItem)
-    character.ChildRemoved:Connect(updateHeldItem)
-    updateHeldItem()
-end)
-
-if player.Character then
-    player.Character.ChildAdded:Connect(updateHeldItem)
-    player.Character.ChildRemoved:Connect(updateHeldItem)
-    updateHeldItem()
-end
-
-
-dupeButton.MouseButton1Click:Connect(function()
-    local character = player.Character or player.CharacterAdded:Wait()
-    local tool = character:FindFirstChildOfClass("Tool")
-    if tool then
-        local clone = tool:Clone()
-        clone.Parent = backpack
-        
-        
-        local notifFrame = Instance.new("Frame")
-        notifFrame.Size = UDim2.new(0, 450, 0, 100)
-        notifFrame.Position = UDim2.new(0.5, -225, 0.1, 0)
-        notifFrame.BackgroundColor3 = Color3.fromRGB(30, 35, 45)
-        notifFrame.BorderSizePixel = 0
-        notifFrame.BackgroundTransparency = 1
-        notifFrame.Parent = screenGui
-        
-        local notifCorner = Instance.new("UICorner")
-        notifCorner.CornerRadius = UDim.new(0, 16)
-        notifCorner.Parent = notifFrame
-        
-        local notifStroke = Instance.new("UIStroke")
-        notifStroke.Color = Color3.fromRGB(50, 200, 100)
-        notifStroke.Thickness = 3
-        notifStroke.Transparency = 1
-        notifStroke.Parent = notifFrame
-        
-        local notifGradient = Instance.new("UIGradient")
-        notifGradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 45, 55)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 30, 40))
-        }
-        notifGradient.Rotation = 45
-        notifGradient.Parent = notifFrame
-        
-        local icon = Instance.new("TextLabel")
-        icon.Size = UDim2.new(0, 60, 0, 60)
-        icon.Position = UDim2.new(0, 15, 0.5, -30)
-        icon.BackgroundColor3 = Color3.fromRGB(50, 200, 100)
-        icon.BorderSizePixel = 0
-        icon.Text = "âœ“"
-        icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-        icon.Font = Enum.Font.GothamBold
-        icon.TextSize = 36
-        icon.TextTransparency = 1
-        icon.BackgroundTransparency = 1
-        icon.Parent = notifFrame
-        
-        local iconCorner = Instance.new("UICorner")
-        iconCorner.CornerRadius = UDim.new(1, 0)
-        iconCorner.Parent = icon
-        
-        local titleLabel = Instance.new("TextLabel")
-        titleLabel.Size = UDim2.new(1, -95, 0, 35)
-        titleLabel.Position = UDim2.new(0, 85, 0, 15)
-        titleLabel.BackgroundTransparency = 1
-        titleLabel.Text = "SUCCESS"
-        titleLabel.TextColor3 = Color3.fromRGB(50, 200, 100)
-        titleLabel.Font = Enum.Font.GothamBold
-        titleLabel.TextSize = 20
-        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        titleLabel.TextTransparency = 1
-        titleLabel.Parent = notifFrame
-        
-        local descLabel = Instance.new("TextLabel")
-        descLabel.Size = UDim2.new(1, -95, 0, 30)
-        descLabel.Position = UDim2.new(0, 85, 0, 50)
-        descLabel.BackgroundTransparency = 1
-        descLabel.Text = "Duped " .. tool.Name
-        descLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
-        descLabel.Font = Enum.Font.Gotham
-        descLabel.TextSize = 16
-        descLabel.TextXAlignment = Enum.TextXAlignment.Left
-        descLabel.TextTransparency = 1
-        descLabel.TextWrapped = true
-        descLabel.Parent = notifFrame
-        
-        notifFrame.Position = UDim2.new(0.5, -225, 0.05, 0)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, -225, 0.1, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.5), {Transparency = 0}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        
-        wait(2.5)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {BackgroundTransparency = 1, Position = UDim2.new(0.5, -225, 0.05, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.4), {Transparency = 1}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.4), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        wait(0.4)
-        notifFrame:Destroy()
-    else
-        infoLabel.Text = "No item held!"
-        wait(1.5)
-        updateHeldItem()
-    end
-end)
-
-
-dupeInvButton.MouseButton1Click:Connect(function()
-    local itemsDuped = 0
-    for _, item in pairs(backpack:GetChildren()) do
-        if item:IsA("Tool") then
-            local clone = item:Clone()
-            clone.Parent = backpack
-            itemsDuped = itemsDuped + 1
-        end
-    end
-    
-    if itemsDuped > 0 then
-        
-        local notifFrame = Instance.new("Frame")
-        notifFrame.Size = UDim2.new(0, 450, 0, 100)
-        notifFrame.Position = UDim2.new(0.5, -225, 0.1, 0)
-        notifFrame.BackgroundColor3 = Color3.fromRGB(30, 35, 45)
-        notifFrame.BorderSizePixel = 0
-        notifFrame.BackgroundTransparency = 1
-        notifFrame.Parent = screenGui
-        
-        local notifCorner = Instance.new("UICorner")
-        notifCorner.CornerRadius = UDim.new(0, 16)
-        notifCorner.Parent = notifFrame
-        
-        local notifStroke = Instance.new("UIStroke")
-        notifStroke.Color = Color3.fromRGB(220, 80, 80)
-        notifStroke.Thickness = 3
-        notifStroke.Transparency = 1
-        notifStroke.Parent = notifFrame
-        
-        local notifGradient = Instance.new("UIGradient")
-        notifGradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 30, 30)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 20, 20))
-        }
-        notifGradient.Rotation = 45
-        notifGradient.Parent = notifFrame
-        
-        local icon = Instance.new("TextLabel")
-        icon.Size = UDim2.new(0, 60, 0, 60)
-        icon.Position = UDim2.new(0, 15, 0.5, -30)
-        icon.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
-        icon.BorderSizePixel = 0
-        icon.Text = "âš "
-        icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-        icon.Font = Enum.Font.GothamBold
-        icon.TextSize = 36
-        icon.TextTransparency = 1
-        icon.BackgroundTransparency = 1
-        icon.Parent = notifFrame
-        
-        local iconCorner = Instance.new("UICorner")
-        iconCorner.CornerRadius = UDim.new(1, 0)
-        iconCorner.Parent = icon
-        
-        local titleLabel = Instance.new("TextLabel")
-        titleLabel.Size = UDim2.new(1, -95, 0, 35)
-        titleLabel.Position = UDim2.new(0, 85, 0, 15)
-        titleLabel.BackgroundTransparency = 1
-        titleLabel.Text = "INVENTORY DUPED"
-        titleLabel.TextColor3 = Color3.fromRGB(220, 80, 80)
-        titleLabel.Font = Enum.Font.GothamBold
-        titleLabel.TextSize = 20
-        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        titleLabel.TextTransparency = 1
-        titleLabel.Parent = notifFrame
-        
-        local descLabel = Instance.new("TextLabel")
-        descLabel.Size = UDim2.new(1, -95, 0, 30)
-        descLabel.Position = UDim2.new(0, 85, 0, 50)
-        descLabel.BackgroundTransparency = 1
-        descLabel.Text = "Duped " .. itemsDuped .. " Items!"
-        descLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
-        descLabel.Font = Enum.Font.Gotham
-        descLabel.TextSize = 16
-        descLabel.TextXAlignment = Enum.TextXAlignment.Left
-        descLabel.TextTransparency = 1
-        descLabel.TextWrapped = true
-        descLabel.Parent = notifFrame
-        
-        notifFrame.Position = UDim2.new(0.5, -225, 0.05, 0)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, -225, 0.1, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.5), {Transparency = 0}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        
-        wait(2.5)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {BackgroundTransparency = 1, Position = UDim2.new(0.5, -225, 0.05, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.4), {Transparency = 1}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.4), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        wait(0.4)
-        notifFrame:Destroy()
-    else
-        infoLabel.Text = "No items in backpack!"
-        wait(1.5)
-        updateHeldItem()
-    end
-end)local player = game:GetService("Players").LocalPlayer
-local backpack = player:WaitForChild("Backpack")
-
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "DupeUI"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 320, 0, 200)
-frame.Position = UDim2.new(0.5, -160, 0.5, -100)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-frame.BorderSizePixel = 0
-frame.Parent = screenGui
-
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = frame
-
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(60, 60, 80)
-stroke.Thickness = 2
-stroke.Parent = frame
-
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -80, 0, 40)
-title.BackgroundTransparency = 1
-title.Text = "Plant vs Brainrot Duper"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 20
 title.Parent = frame
 
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0.9, 0, 0, 40)
+button.Position = UDim2.new(0.05, 0, 0.4, 0)
+button.Text = "Duplicate "
+button.Font = Enum.Font.GothamBold
+button.TextSize = 18
+button.TextColor3 = Color3.fromRGB(255,255,255)
+button.Parent = frame
 
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -70, 0, 5)
-closeButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-closeButton.BorderSizePixel = 0
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 16
-closeButton.Parent = frame
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 150)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 120, 255))
+}
+gradient.Parent = button
 
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 6)
-closeCorner.Parent = closeButton
+local corner1 = Instance.new("UICorner")
+corner1.CornerRadius = UDim.new(0, 12)
+corner1.Parent = button
 
-closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
-end)
+local corner2 = Instance.new("UICorner")
+corner2.CornerRadius = UDim.new(0, 15)
+corner2.Parent = frame
 
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, 0, 0, 20)
+status.Position = UDim2.new(0, 0, 0.8, 0)
+status.BackgroundTransparency = 1
+status.Text = "Ready"
+status.Font = Enum.Font.Gotham
+status.TextSize = 16
+status.TextColor3 = Color3.fromRGB(200,200,200)
+status.Parent = frame
 
-local minimizeButton = Instance.new("TextButton")
-minimizeButton.Size = UDim2.new(0, 30, 0, 30)
-minimizeButton.Position = UDim2.new(1, -35, 0, 5)
-minimizeButton.BackgroundColor3 = Color3.fromRGB(220, 180, 50)
-minimizeButton.BorderSizePixel = 0
-minimizeButton.Text = "-"
-minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-minimizeButton.Font = Enum.Font.GothamBold
-minimizeButton.TextSize = 20
-minimizeButton.Parent = frame
+local function cloneHeldTool()
+    local char = player.Character
+    if not char then return end
 
-local minCorner = Instance.new("UICorner")
-minCorner.CornerRadius = UDim.new(0, 6)
-minCorner.Parent = minimizeButton
-
-local isMinimized = false
-local originalSize = frame.Size
-local contentVisible = true
-
-local function toggleContent(visible)
-    infoLabel.Visible = visible
-    dupeButton.Visible = visible
-    dupeInvButton.Visible = visible
-end
-
-minimizeButton.MouseButton1Click:Connect(function()
-    if isMinimized then
-        frame:TweenSize(originalSize, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
-        minimizeButton.Text = "-"
-        isMinimized = false
-        wait(0.15)
-        toggleContent(true)
-    else
-        toggleContent(false)
-        frame:TweenSize(UDim2.new(0, 320, 0, 40), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
-        minimizeButton.Text = "+"
-        isMinimized = true
-    end
-end)
-
-local infoLabel = Instance.new("TextLabel")
-infoLabel.Size = UDim2.new(1, -20, 0, 30)
-infoLabel.Position = UDim2.new(0, 10, 0, 45)
-infoLabel.BackgroundTransparency = 1
-infoLabel.Text = "Hold an item"
-infoLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
-infoLabel.Font = Enum.Font.Gotham
-infoLabel.TextSize = 14
-infoLabel.Parent = frame
-
-local dupeButton = Instance.new("TextButton")
-dupeButton.Size = UDim2.new(0, 280, 0, 40)
-dupeButton.Position = UDim2.new(0.5, -140, 0, 85)
-dupeButton.BackgroundColor3 = Color3.fromRGB(70, 130, 255)
-dupeButton.BorderSizePixel = 0
-dupeButton.Text = "DUPE"
-dupeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-dupeButton.Font = Enum.Font.GothamBold
-dupeButton.TextSize = 16
-dupeButton.Parent = frame
-
-local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, 8)
-buttonCorner.Parent = dupeButton
-
-
-local dupeInvButton = Instance.new("TextButton")
-dupeInvButton.Size = UDim2.new(0, 280, 0, 40)
-dupeInvButton.Position = UDim2.new(0.5, -140, 0, 135)
-dupeInvButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-dupeInvButton.BorderSizePixel = 0
-dupeInvButton.Text = "Dupe Inventory (Risky)"
-dupeInvButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-dupeInvButton.Font = Enum.Font.GothamBold
-dupeInvButton.TextSize = 16
-dupeInvButton.Parent = frame
-
-local invButtonCorner = Instance.new("UICorner")
-invButtonCorner.CornerRadius = UDim.new(0, 8)
-invButtonCorner.Parent = dupeInvButton
-
-
-local dragging = false
-local dragStart = nil
-local startPos = nil
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-    end
-end)
-
-frame.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-    end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-
-local function updateHeldItem()
-    local character = player.Character
-    if character then
-        local tool = character:FindFirstChildOfClass("Tool")
-        if tool then
-            infoLabel.Text = "Holding: " .. tool.Name
-        else
-            infoLabel.Text = "Hold an item"
-        end
-    end
-end
-
-player.CharacterAdded:Connect(function(character)
-    character.ChildAdded:Connect(updateHeldItem)
-    character.ChildRemoved:Connect(updateHeldItem)
-    updateHeldItem()
-end)
-
-if player.Character then
-    player.Character.ChildAdded:Connect(updateHeldItem)
-    player.Character.ChildRemoved:Connect(updateHeldItem)
-    updateHeldItem()
-end
-
-
-dupeButton.MouseButton1Click:Connect(function()
-    local character = player.Character or player.CharacterAdded:Wait()
-    local tool = character:FindFirstChildOfClass("Tool")
-    if tool then
-        local clone = tool:Clone()
-        clone.Parent = backpack
-        
-        
-        local notifFrame = Instance.new("Frame")
-        notifFrame.Size = UDim2.new(0, 450, 0, 100)
-        notifFrame.Position = UDim2.new(0.5, -225, 0.1, 0)
-        notifFrame.BackgroundColor3 = Color3.fromRGB(30, 35, 45)
-        notifFrame.BorderSizePixel = 0
-        notifFrame.BackgroundTransparency = 1
-        notifFrame.Parent = screenGui
-        
-        local notifCorner = Instance.new("UICorner")
-        notifCorner.CornerRadius = UDim.new(0, 16)
-        notifCorner.Parent = notifFrame
-        
-        local notifStroke = Instance.new("UIStroke")
-        notifStroke.Color = Color3.fromRGB(50, 200, 100)
-        notifStroke.Thickness = 3
-        notifStroke.Transparency = 1
-        notifStroke.Parent = notifFrame
-        
-        local notifGradient = Instance.new("UIGradient")
-        notifGradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 45, 55)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 30, 40))
-        }
-        notifGradient.Rotation = 45
-        notifGradient.Parent = notifFrame
-        
-        local icon = Instance.new("TextLabel")
-        icon.Size = UDim2.new(0, 60, 0, 60)
-        icon.Position = UDim2.new(0, 15, 0.5, -30)
-        icon.BackgroundColor3 = Color3.fromRGB(50, 200, 100)
-        icon.BorderSizePixel = 0
-        icon.Text = "âœ“"
-        icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-        icon.Font = Enum.Font.GothamBold
-        icon.TextSize = 36
-        icon.TextTransparency = 1
-        icon.BackgroundTransparency = 1
-        icon.Parent = notifFrame
-        
-        local iconCorner = Instance.new("UICorner")
-        iconCorner.CornerRadius = UDim.new(1, 0)
-        iconCorner.Parent = icon
-        
-        local titleLabel = Instance.new("TextLabel")
-        titleLabel.Size = UDim2.new(1, -95, 0, 35)
-        titleLabel.Position = UDim2.new(0, 85, 0, 15)
-        titleLabel.BackgroundTransparency = 1
-        titleLabel.Text = "SUCCESS"
-        titleLabel.TextColor3 = Color3.fromRGB(50, 200, 100)
-        titleLabel.Font = Enum.Font.GothamBold
-        titleLabel.TextSize = 20
-        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        titleLabel.TextTransparency = 1
-        titleLabel.Parent = notifFrame
-        
-        local descLabel = Instance.new("TextLabel")
-        descLabel.Size = UDim2.new(1, -95, 0, 30)
-        descLabel.Position = UDim2.new(0, 85, 0, 50)
-        descLabel.BackgroundTransparency = 1
-        descLabel.Text = "Duped " .. tool.Name
-        descLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
-        descLabel.Font = Enum.Font.Gotham
-        descLabel.TextSize = 16
-        descLabel.TextXAlignment = Enum.TextXAlignment.Left
-        descLabel.TextTransparency = 1
-        descLabel.TextWrapped = true
-        descLabel.Parent = notifFrame
-        
-        notifFrame.Position = UDim2.new(0.5, -225, 0.05, 0)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, -225, 0.1, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.5), {Transparency = 0}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        
-        wait(2.5)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {BackgroundTransparency = 1, Position = UDim2.new(0.5, -225, 0.05, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.4), {Transparency = 1}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.4), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        wait(0.4)
-        notifFrame:Destroy()
-    else
-        infoLabel.Text = "No item held!"
-        wait(1.5)
-        updateHeldItem()
-    end
-end)
-
-
-dupeInvButton.MouseButton1Click:Connect(function()
-    local itemsDuped = 0
-    for _, item in pairs(backpack:GetChildren()) do
+    local tool = nil
+    for _, item in ipairs(char:GetChildren()) do
         if item:IsA("Tool") then
-            local clone = item:Clone()
-            clone.Parent = backpack
-            itemsDuped = itemsDuped + 1
+            tool = item
+            break
         end
     end
-    
-    if itemsDuped > 0 then
-        
-        local notifFrame = Instance.new("Frame")
-        notifFrame.Size = UDim2.new(0, 450, 0, 100)
-        notifFrame.Position = UDim2.new(0.5, -225, 0.1, 0)
-        notifFrame.BackgroundColor3 = Color3.fromRGB(30, 35, 45)
-        notifFrame.BorderSizePixel = 0
-        notifFrame.BackgroundTransparency = 1
-        notifFrame.Parent = screenGui
-        
-        local notifCorner = Instance.new("UICorner")
-        notifCorner.CornerRadius = UDim.new(0, 16)
-        notifCorner.Parent = notifFrame
-        
-        local notifStroke = Instance.new("UIStroke")
-        notifStroke.Color = Color3.fromRGB(220, 80, 80)
-        notifStroke.Thickness = 3
-        notifStroke.Transparency = 1
-        notifStroke.Parent = notifFrame
-        
-        local notifGradient = Instance.new("UIGradient")
-        notifGradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 30, 30)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 20, 20))
-        }
-        notifGradient.Rotation = 45
-        notifGradient.Parent = notifFrame
-        
-        local icon = Instance.new("TextLabel")
-        icon.Size = UDim2.new(0, 60, 0, 60)
-        icon.Position = UDim2.new(0, 15, 0.5, -30)
-        icon.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
-        icon.BorderSizePixel = 0
-        icon.Text = "âš "
-        icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-        icon.Font = Enum.Font.GothamBold
-        icon.TextSize = 36
-        icon.TextTransparency = 1
-        icon.BackgroundTransparency = 1
-        icon.Parent = notifFrame
-        
-        local iconCorner = Instance.new("UICorner")
-        iconCorner.CornerRadius = UDim.new(1, 0)
-        iconCorner.Parent = icon
-        
-        local titleLabel = Instance.new("TextLabel")
-        titleLabel.Size = UDim2.new(1, -95, 0, 35)
-        titleLabel.Position = UDim2.new(0, 85, 0, 15)
-        titleLabel.BackgroundTransparency = 1
-        titleLabel.Text = "INVENTORY DUPED"
-        titleLabel.TextColor3 = Color3.fromRGB(220, 80, 80)
-        titleLabel.Font = Enum.Font.GothamBold
-        titleLabel.TextSize = 20
-        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        titleLabel.TextTransparency = 1
-        titleLabel.Parent = notifFrame
-        
-        local descLabel = Instance.new("TextLabel")
-        descLabel.Size = UDim2.new(1, -95, 0, 30)
-        descLabel.Position = UDim2.new(0, 85, 0, 50)
-        descLabel.BackgroundTransparency = 1
-        descLabel.Text = "Duped " .. itemsDuped .. " Items!"
-        descLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
-        descLabel.Font = Enum.Font.Gotham
-        descLabel.TextSize = 16
-        descLabel.TextXAlignment = Enum.TextXAlignment.Left
-        descLabel.TextTransparency = 1
-        descLabel.TextWrapped = true
-        descLabel.Parent = notifFrame
-        
-        notifFrame.Position = UDim2.new(0.5, -225, 0.05, 0)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, -225, 0.1, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.5), {Transparency = 0}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
-        
-        wait(2.5)
-        game:GetService("TweenService"):Create(notifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {BackgroundTransparency = 1, Position = UDim2.new(0.5, -225, 0.05, 0)}):Play()
-        game:GetService("TweenService"):Create(notifStroke, TweenInfo.new(0.4), {Transparency = 1}):Play()
-        game:GetService("TweenService"):Create(icon, TweenInfo.new(0.4), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        game:GetService("TweenService"):Create(descLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-        wait(0.4)
-        notifFrame:Destroy()
-    else
-        infoLabel.Text = "No items in backpack!"
-        wait(1.5)
-        updateHeldItem()
+
+    if not tool then
+        status.Text = "You not holding a tool"
+        return
     end
-end)
+
+    local fake = tool:Clone()
+
+    for _,desc in ipairs(fake:GetDescendants()) do
+        if desc:IsA("Script") or desc:IsA("LocalScript") then
+            desc:Destroy()
+        end
+    end
+
+    fake.Parent = Backpack -- cho vào Backpack client
+    status.Text = "Completed: " .. tool.Name
+end
+
+button.MouseButton1Click:Connect(cloneHeldTool)
