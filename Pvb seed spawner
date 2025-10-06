@@ -1,0 +1,324 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SeedSpawnerGui"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = playerGui
+
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 320, 0, 240)
+mainFrame.Position = UDim2.new(0, 100, 0, 100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 12)
+mainCorner.Parent = mainFrame
+
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Color = Color3.fromRGB(51, 65, 85)
+mainStroke.Thickness = 1
+mainStroke.Parent = mainFrame
+
+
+local header = Instance.new("Frame")
+header.Name = "Header"
+header.Size = UDim2.new(1, 0, 0, 40)
+header.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+header.BorderSizePixel = 0
+header.Parent = mainFrame
+
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 12)
+headerCorner.Parent = header
+
+local headerTitle = Instance.new("TextLabel")
+headerTitle.Name = "Title"
+headerTitle.Size = UDim2.new(1, -80, 1, 0)
+headerTitle.Position = UDim2.new(0, 40, 0, 0)
+headerTitle.BackgroundTransparency = 1
+headerTitle.Text = "Pvb Seed Spanwer (SpvScript yt)"
+headerTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+headerTitle.TextSize = 14
+headerTitle.Font = Enum.Font.GothamBold
+headerTitle.TextXAlignment = Enum.TextXAlignment.Left
+headerTitle.Parent = header
+
+-- Close Button
+local closeBtn = Instance.new("TextButton")
+closeBtn.Name = "CloseButton"
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -35, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(51, 65, 85)
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.fromRGB(203, 213, 225)
+closeBtn.TextSize = 14
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.Parent = header
+
+local closeBtnCorner = Instance.new("UICorner")
+closeBtnCorner.CornerRadius = UDim.new(0, 6)
+closeBtnCorner.Parent = closeBtn
+
+-- Content Frame
+local content = Instance.new("Frame")
+content.Name = "Content"
+content.Size = UDim2.new(1, -32, 1, -56)
+content.Position = UDim2.new(0, 16, 0, 48)
+content.BackgroundTransparency = 1
+content.Parent = mainFrame
+
+
+local seedLabel = Instance.new("TextLabel")
+seedLabel.Name = "SeedLabel"
+seedLabel.Size = UDim2.new(1, 0, 0, 20)
+seedLabel.Position = UDim2.new(0, 0, 0, 0)
+seedLabel.BackgroundTransparency = 1
+seedLabel.Text = "Seed Name"
+seedLabel.TextColor3 = Color3.fromRGB(203, 213, 225)
+seedLabel.TextSize = 12
+seedLabel.Font = Enum.Font.GothamMedium
+seedLabel.TextXAlignment = Enum.TextXAlignment.Left
+seedLabel.Parent = content
+
+-- Seed Name Input
+local seedInput = Instance.new("TextBox")
+seedInput.Name = "SeedInput"
+seedInput.Size = UDim2.new(1, 0, 0, 36)
+seedInput.Position = UDim2.new(0, 0, 0, 24)
+seedInput.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+seedInput.Text = "Tomatrio Seed"
+seedInput.PlaceholderText = "Enter seed name..."
+seedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+seedInput.PlaceholderColor3 = Color3.fromRGB(148, 163, 184)
+seedInput.TextSize = 13
+seedInput.Font = Enum.Font.Gotham
+seedInput.ClearTextOnFocus = false
+seedInput.Parent = content
+
+local seedInputCorner = Instance.new("UICorner")
+seedInputCorner.CornerRadius = UDim.new(0, 8)
+seedInputCorner.Parent = seedInput
+
+local seedInputStroke = Instance.new("UIStroke")
+seedInputStroke.Color = Color3.fromRGB(71, 85, 105)
+seedInputStroke.Thickness = 1
+seedInputStroke.Parent = seedInput
+
+local seedInputPadding = Instance.new("UIPadding")
+seedInputPadding.PaddingLeft = UDim.new(0, 12)
+seedInputPadding.Parent = seedInput
+
+
+local amountLabel = Instance.new("TextLabel")
+amountLabel.Name = "AmountLabel"
+amountLabel.Size = UDim2.new(1, 0, 0, 20)
+amountLabel.Position = UDim2.new(0, 0, 0, 72)
+amountLabel.BackgroundTransparency = 1
+amountLabel.Text = "Amount"
+amountLabel.TextColor3 = Color3.fromRGB(203, 213, 225)
+amountLabel.TextSize = 12
+amountLabel.Font = Enum.Font.GothamMedium
+amountLabel.TextXAlignment = Enum.TextXAlignment.Left
+amountLabel.Parent = content
+
+
+local amountContainer = Instance.new("Frame")
+amountContainer.Name = "AmountContainer"
+amountContainer.Size = UDim2.new(1, 0, 0, 36)
+amountContainer.Position = UDim2.new(0, 0, 0, 96)
+amountContainer.BackgroundTransparency = 1
+amountContainer.Parent = content
+
+
+local minusBtn = Instance.new("TextButton")
+minusBtn.Name = "MinusButton"
+minusBtn.Size = UDim2.new(0, 40, 0, 36)
+minusBtn.Position = UDim2.new(0, 0, 0, 0)
+minusBtn.BackgroundColor3 = Color3.fromRGB(51, 65, 85)
+minusBtn.Text = "-"
+minusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+minusBtn.TextSize = 20
+minusBtn.Font = Enum.Font.GothamBold
+minusBtn.Parent = amountContainer
+
+local minusBtnCorner = Instance.new("UICorner")
+minusBtnCorner.CornerRadius = UDim.new(0, 8)
+minusBtnCorner.Parent = minusBtn
+
+
+local amountInput = Instance.new("TextBox")
+amountInput.Name = "AmountInput"
+amountInput.Size = UDim2.new(1, -88, 0, 36)
+amountInput.Position = UDim2.new(0, 44, 0, 0)
+amountInput.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+amountInput.Text = "2"
+amountInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+amountInput.TextSize = 13
+amountInput.Font = Enum.Font.Gotham
+amountInput.ClearTextOnFocus = false
+amountInput.Parent = amountContainer
+
+local amountInputCorner = Instance.new("UICorner")
+amountInputCorner.CornerRadius = UDim.new(0, 8)
+amountInputCorner.Parent = amountInput
+
+local amountInputStroke = Instance.new("UIStroke")
+amountInputStroke.Color = Color3.fromRGB(71, 85, 105)
+amountInputStroke.Thickness = 1
+amountInputStroke.Parent = amountInput
+
+
+local plusBtn = Instance.new("TextButton")
+plusBtn.Name = "PlusButton"
+plusBtn.Size = UDim2.new(0, 40, 0, 36)
+plusBtn.Position = UDim2.new(1, -40, 0, 0)
+plusBtn.BackgroundColor3 = Color3.fromRGB(51, 65, 85)
+plusBtn.Text = "+"
+plusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusBtn.TextSize = 20
+plusBtn.Font = Enum.Font.GothamBold
+plusBtn.Parent = amountContainer
+
+local plusBtnCorner = Instance.new("UICorner")
+plusBtnCorner.CornerRadius = UDim.new(0, 8)
+plusBtnCorner.Parent = plusBtn
+
+-- Spawn Button
+local spawnBtn = Instance.new("TextButton")
+spawnBtn.Name = "SpawnButton"
+spawnBtn.Size = UDim2.new(1, 0, 0, 40)
+spawnBtn.Position = UDim2.new(0, 0, 0, 144)
+spawnBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
+spawnBtn.Text = "Spawn Seeds"
+spawnBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+spawnBtn.TextSize = 14
+spawnBtn.Font = Enum.Font.GothamBold
+spawnBtn.Parent = content
+
+local spawnBtnCorner = Instance.new("UICorner")
+spawnBtnCorner.CornerRadius = UDim.new(0, 8)
+spawnBtnCorner.Parent = spawnBtn
+
+
+local function clampAmount(value)
+    local num = tonumber(value) or 1
+    return math.clamp(num, 1, 999)
+end
+
+
+local function addHoverEffect(button, hoverColor, normalColor)
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
+    end)
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = normalColor}):Play()
+    end)
+end
+
+addHoverEffect(closeBtn, Color3.fromRGB(71, 85, 105), Color3.fromRGB(51, 65, 85))
+addHoverEffect(minusBtn, Color3.fromRGB(71, 85, 105), Color3.fromRGB(51, 65, 85))
+addHoverEffect(plusBtn, Color3.fromRGB(71, 85, 105), Color3.fromRGB(51, 65, 85))
+addHoverEffect(spawnBtn, Color3.fromRGB(5, 150, 105), Color3.fromRGB(16, 185, 129))
+
+
+closeBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = false
+end)
+
+minusBtn.MouseButton1Click:Connect(function()
+    local current = tonumber(amountInput.Text) or 1
+    amountInput.Text = tostring(clampAmount(current - 1))
+end)
+
+plusBtn.MouseButton1Click:Connect(function()
+    local current = tonumber(amountInput.Text) or 1
+    amountInput.Text = tostring(clampAmount(current + 1))
+end)
+
+amountInput.FocusLost:Connect(function()
+    amountInput.Text = tostring(clampAmount(amountInput.Text))
+end)
+
+spawnBtn.MouseButton1Click:Connect(function()
+    local p = player
+    local b = p:WaitForChild("Backpack")
+    local s = game.ReplicatedStorage.Assets.Seeds
+    local seedName = seedInput.Text
+    local number = clampAmount(amountInput.Text)
+    
+    
+    local existing = nil
+    for _, item in pairs(b:GetChildren()) do
+        if item.Name:match("%[%d+x%]%s*(.+)") == seedName or item.Name == seedName then
+            existing = item
+            break
+        end
+    end
+    
+    if existing then
+        local n = (existing:GetAttribute("StackAmount") or 1) + number
+        existing:SetAttribute("StackAmount", n)
+        existing.Name = "["..n.."x] "..seedName
+    else
+        local seedObj = s:FindFirstChild(seedName)
+        if seedObj then
+            local c = seedObj:Clone()
+            c.Parent = b
+            c:SetAttribute("StackAmount", number)
+            c.Name = "["..number.."x] "..seedName
+        else
+            warn("Seed not found: " .. seedName)
+        end
+    end
+end)
+
+
+local dragging = false
+local dragInput, mousePos, framePos
+
+local function update(input)
+    local delta = input.Position - mousePos
+    mainFrame.Position = UDim2.new(
+        framePos.X.Scale,
+        framePos.X.Offset + delta.X,
+        framePos.Y.Scale,
+        framePos.Y.Offset + delta.Y
+    )
+end
+
+header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        mousePos = input.Position
+        framePos = mainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if dragging and dragInput then
+        update(dragInput)
+    end
+end)
